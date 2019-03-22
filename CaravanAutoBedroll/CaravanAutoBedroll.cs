@@ -33,13 +33,6 @@ namespace CaravanAutoBedroll
                 var stuffList = transferables.Where(x => x.HasAnyThing && !(x.AnyThing is Pawn)).ToList();
                 var caravanList = stuffList.Where(x => x.CountToTransfer > 0).ToList();
 
-                // TODO: Remove debug trace
-                Log.Message("[CaravanAutoBedroll] Caravan bringing: ");
-                foreach (var x in caravanList)
-                {
-                    Log.Message(ThingDebugString(x));
-                }
-
                 var plannedBedrolls = caravanList.Where(IsBedroll).ToList();
                 var caravanColonists = pawns.Where(x => !x.AnimalOrWildMan()).ToList();
                 var bedrollsNeeded = caravanColonists.Count;
@@ -116,77 +109,6 @@ namespace CaravanAutoBedroll
                     qc = QualityCategory.Normal;
 
                 return (byte)qc;
-            }
-
-            // TODO: Remove debug code once stable
-            static string ThingDebugString(TransferableOneWay x)
-            {
-                var output = new StringBuilder();
-
-                const string delimiter = "*";
-
-                output.Append(x.Label);
-                output.Append(delimiter);
-                output.Append(x.CountToTransfer);
-                output.Append("/");
-                output.Append(x.MaxCount);
-
-                output.Append(delimiter);
-                output.Append("ThingDef:");
-                output.Append(x.ThingDef);
-                if (x.ThingDef != null)
-                {
-                    output.Append(delimiter);
-                    output.Append(x.ThingDef.GetType());
-
-                    output.Append(delimiter);
-                    output.Append(x.ThingDef.building);
-                }
-
-                output.Append(delimiter);
-                output.Append("AnyThing:");
-                output.Append(x.AnyThing);
-                if (x.AnyThing != null)
-                {
-                    output.Append(delimiter);
-                    output.Append(x.AnyThing.GetType());
-
-                    output.Append(delimiter);
-                    output.Append(x.AnyThing.Label);
-
-                    var innerThing = x.AnyThing.GetInnerIfMinified();
-                    if (innerThing != null)
-                    {
-                        output.Append(delimiter);
-                        output.Append("InnerThing:");
-                        output.Append(innerThing.GetType());
-
-                        output.Append(delimiter);
-                        output.Append(innerThing.Label);
-
-                        output.Append(delimiter);
-                        output.Append(innerThing.def);
-
-                        if (innerThing.def != null)
-                        {
-                            output.Append(delimiter);
-                            output.Append(innerThing.def.building);
-
-                            if (innerThing.def.building != null)
-                            {
-                                var building = innerThing.def.building;
-
-                                output.Append(delimiter);
-                                output.Append(building.bed_caravansCanUse);
-
-                                output.Append(delimiter);
-                                output.Append(building.GetType());
-                            }
-                        }
-                    }
-                }
-
-                return output.ToString();
             }
         }
     }
