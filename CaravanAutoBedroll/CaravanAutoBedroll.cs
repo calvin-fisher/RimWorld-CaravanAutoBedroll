@@ -93,10 +93,7 @@ namespace CaravanAutoBedroll
                     return false;
 
                 var minifiedThing = x.AnyThing.GetInnerIfMinified();
-                if (minifiedThing == null)
-                    return false;
-
-                if (minifiedThing.def == null || minifiedThing.def.building == null)
+                if (minifiedThing == null || minifiedThing.def == null || minifiedThing.def.building == null)
                     return false;
 
                 return minifiedThing.def.building.bed_caravansCanUse;
