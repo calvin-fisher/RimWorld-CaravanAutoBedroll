@@ -53,7 +53,7 @@ namespace CaravanAutoBedroll
                     // Look for additional bedrolls
                     LogMessage($"Looking for {bedrollDeficit} additional bedrolls");
                     var availableBedrollList = stuffList.Where(IsBedroll).Where(x => x.CountToTransfer < x.MaxCount).ToList();
-                    LogMessage($"Found {availableBedrollList.Count} unused minified bedrolls");
+                    LogMessage($"Found {availableBedrollList.Count} unused minified bedroll piles");
 
                     if (!availableBedrollList.Any())
                     {
@@ -66,7 +66,7 @@ namespace CaravanAutoBedroll
                     // TODO: check to make sure caravan has carrying capacity?
 
                     // Take best first 
-                    var sortedBedrolls = availableBedrollList.OrderByDescending(GetQualityForSort);
+                    var sortedBedrolls = availableBedrollList.OrderByDescending(GetBedrollSortValue);
 
                     // Add additional bedrolls until satisfied
                     var updatedBedrollDeficit = bedrollDeficit;
@@ -107,13 +107,27 @@ namespace CaravanAutoBedroll
                 return minifiedThing.def.building.bed_caravansCanUse;
             }
 
-            static byte GetQualityForSort(TransferableOneWay x)
+            static float GetBedrollSortValue(TransferableOneWay x)
             {
-                QualityCategory qc;
-                if (!x.AnyThing.TryGetQuality(out qc))
-                    qc = QualityCategory.Normal;
+                var comfort = 0f;
+                var calculatedComfort = false;
 
-                return (byte)qc;
+                if (x.HasAnyThing)
+                {
+                    var innerThing = x.AnyThing.GetInnerIfMinified();
+                    if (innerThing != null)
+                    {
+                        comfort = innerThing.GetStatValue(StatDefOf.Comfort);
+                        calculatedComfort = true;
+                    }
+                }
+
+                if (!calculatedComfort)
+                {
+                    LogMessage("Could not calculate comfort for " + x.Label);
+                }
+
+                return comfort;
             }
         }
 

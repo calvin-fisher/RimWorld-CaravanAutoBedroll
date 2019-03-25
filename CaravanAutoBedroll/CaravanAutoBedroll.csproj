@@ -66,6 +66,6 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /Y $(ProjectDir)bin\$(ConfigurationName)\CaravanAutoBedroll.dll $(ProjectDir)bin\$(ConfigurationName)\Mod\CaravanAutoBedroll\Assemblies
-if "$(ConfigurationName)" == "Debug" xcopy /E /Y "$(ProjectDir)bin\$(ConfigurationName)\Mod" "C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods"</PostBuildEvent>
+xcopy /E /Y "$(ProjectDir)bin\$(ConfigurationName)\Mod" "C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods"</PostBuildEvent>
   </PropertyGroup>
 </Project>
