@@ -94,49 +94,49 @@ namespace CaravanAutoBedroll
                     LogError(ex.ToString());
                 }
             }
-
-            static bool IsBedroll(TransferableOneWay x)
-            {
-                if (x.AnyThing == null)
-                    return false;
-
-                var minifiedThing = x.AnyThing.GetInnerIfMinified();
-                if (minifiedThing == null || minifiedThing.def == null || minifiedThing.def.building == null)
-                    return false;
-
-                return minifiedThing.def.building.bed_caravansCanUse;
-            }
-
-            static float GetBedrollSortValue(TransferableOneWay x)
-            {
-                var comfort = 0f;
-                var calculatedComfort = false;
-
-                if (x.HasAnyThing)
-                {
-                    var innerThing = x.AnyThing.GetInnerIfMinified();
-                    if (innerThing != null)
-                    {
-                        comfort = innerThing.GetStatValue(StatDefOf.Comfort);
-                        calculatedComfort = true;
-                    }
-                }
-
-                if (!calculatedComfort)
-                {
-                    LogMessage("Could not calculate comfort for " + x.Label);
-                }
-
-                return comfort;
-            }
         }
 
-        static void LogMessage(string message)
+        public static bool IsBedroll(TransferableOneWay x)
+        {
+            if (x.AnyThing == null)
+                return false;
+
+            var minifiedThing = x.AnyThing.GetInnerIfMinified();
+            if (minifiedThing == null || minifiedThing.def == null || minifiedThing.def.building == null)
+                return false;
+
+            return minifiedThing.def.building.bed_caravansCanUse;
+        }
+
+        public static float GetBedrollSortValue(TransferableOneWay x)
+        {
+            var comfort = 0f;
+            var calculatedComfort = false;
+
+            if (x.HasAnyThing)
+            {
+                var innerThing = x.AnyThing.GetInnerIfMinified();
+                if (innerThing != null)
+                {
+                    comfort = innerThing.GetStatValue(StatDefOf.Comfort);
+                    calculatedComfort = true;
+                }
+            }
+
+            if (!calculatedComfort)
+            {
+                LogMessage("Could not calculate comfort for " + x.Label);
+            }
+
+            return comfort;
+        }
+
+        public static void LogMessage(string message)
         {
             Log.Message("[CaravanAutoBedroll]" + message);
         }
 
-        static void LogError(string message)
+        public static void LogError(string message)
         {
             Log.Error("[CaravanAutoBedroll]" + message);
         }
