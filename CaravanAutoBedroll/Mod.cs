@@ -5,56 +5,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using UnityEngine;
 using Verse;
 
 namespace CaravanAutoBedroll
 {
+    /// <summary>
+    /// Global mod definitions
+    /// </summary>
     [StaticConstructorOnStartup]
-    public class CaravanAutoBedroll
+    public class Mod
     {
-        static CaravanAutoBedroll()
+        static Mod()
         {
             LogMessage($"Initializing");
-
             var harmony = HarmonyInstance.Create("RimWorld-CaravanAutoBedroll");
-            harmony.PatchAll(Assembly.GetExecutingAssembly());
+
+            Dialog_FormCaravan.Patch(harmony);
         }
 
-        [HarmonyPatch(typeof(RimWorld.Planet.CaravanFormingUtility),
-                      "StartFormingCaravan",
-                      new Type[] { typeof(List<Pawn>), typeof(List<Pawn>), typeof(Faction), typeof(List<TransferableOneWay>), typeof(IntVec3), typeof(IntVec3), typeof(int), typeof(int) })]
-        class CaravanFormingUtility_StartFormingCaravan
+        public static Dictionary<TransferableOneWay, int> GetNeededBedrolls(List<TransferableOneWay> transferables, List<Pawn> pawns = null)
         {
-            static void Prefix(List<Pawn> pawns, List<Pawn> downedPawns, Faction faction, List<TransferableOneWay> transferables, IntVec3 meetingPoint, IntVec3 exitSpot, int startingTile, int destinationTile)
-            {
-                try
-                {
-                    LogMessage("Prefixing CaravanFormingUtility.StartFormingCaravan");
-
-                    var neededBedrolls = GetNeededBedrolls(pawns, transferables);
-                    if (neededBedrolls.Any())
-                    {
-                        foreach (var neededBedroll in neededBedrolls)
-                        {
-                            neededBedroll.Key.AdjustBy(neededBedroll.Value);
-                        }
-
-                        LogMessage("Added additional bedrolls successfully");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    LogError("Exception during CaravanFormingUtility.StartFormingCaravan Prefix");
-                    LogError(ex.ToString());
-                }
-            }
-        }
-
-        public static Dictionary<TransferableOneWay, int> GetNeededBedrolls(List<Pawn> pawns, List<TransferableOneWay> transferables)
-        {
+            LogMessage("Calculating needed bedrolls");
             var neededBedrolls = new Dictionary<TransferableOneWay, int>();
 
             // Pre-calculations
+            pawns = pawns ?? TransferableUtility.GetPawnsFromTransferables(transferables);
+
             var stuffList = transferables.Where(x => x.HasAnyThing && !(x.AnyThing is Pawn)).ToList();
             var caravanList = stuffList.Where(x => x.CountToTransfer > 0).ToList();
 
@@ -85,8 +62,6 @@ namespace CaravanAutoBedroll
             }
 
             // TODO: calculate bedroll capacity and shared bed preference?
-
-            // TODO: check to make sure caravan has carrying capacity?
 
             // Take best first 
             var sortedBedrolls = availableBedrollList.OrderByDescending(GetBedrollSortValue);
@@ -149,9 +124,21 @@ namespace CaravanAutoBedroll
             return comfort;
         }
 
+        public static void LogTrace(string message)
+        {
+#if DEBUG
+            Log.Message("[CaravanAutoBedroll]" + message);
+#endif
+        }
+
         public static void LogMessage(string message)
         {
             Log.Message("[CaravanAutoBedroll]" + message);
+        }
+
+        public static void LogWarning(string message)
+        {
+            Log.Warning("[CaravanAutoBedroll]" + message);
         }
 
         public static void LogError(string message)

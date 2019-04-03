@@ -49,7 +49,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CaravanAutoBedroll.cs" />
+    <Compile Include="CaravanBedrollHelper.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Mod.cs" />
+    <Compile Include="Dialog_FormCaravan.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
