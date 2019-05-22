@@ -5,6 +5,5 @@
 	<supportedVersions>
 		<li>1.0</li>
 	</supportedVersions>
-	<!--<url></url>-->
 	<description>Automatically picks up enough bedrolls before caravans depart</description>
 </ModMetaData>

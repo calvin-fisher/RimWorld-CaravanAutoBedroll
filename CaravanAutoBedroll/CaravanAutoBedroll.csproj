@@ -68,7 +68,14 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y $(ProjectDir)bin\$(ConfigurationName)\CaravanAutoBedroll.dll $(ProjectDir)bin\$(ConfigurationName)\Mod\CaravanAutoBedroll\Assemblies
-xcopy /E /Y "$(ProjectDir)bin\$(ConfigurationName)\Mod" "C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods"</PostBuildEvent>
+    <PostBuildEvent>echo "Moving newly built dll"
+xcopy /Y $(ProjectDir)bin\$(ConfigurationName)\CaravanAutoBedroll.dll $(ProjectDir)Mod\CaravanAutoBedroll\Assemblies
+
+echo "Clearing existing mod directory"
+if EXIST "C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\CaravanAutoBedroll" (
+    RMDIR /S /Q "C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\CaravanAutoBedroll" )
+
+echo "Copying to Mods directory"
+xcopy /S $(ProjectDir)Mod "C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\"</PostBuildEvent>
   </PropertyGroup>
 </Project>

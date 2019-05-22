@@ -27,8 +27,7 @@ namespace CaravanAutoBedroll
         }
 
         static void CheckForErrors_Postfix(RimWorld.Dialog_FormCaravan __instance, ref bool __result, 
-            ref bool ___massUsageDirty, ref float ___lastMassFlashTime,
-            List<Pawn> pawns)
+            ref bool ___massUsageDirty, List<Pawn> pawns)
         {
             // Don't intevene if only closing dialog to choose route
             if (__instance.choosingRoute)
