@@ -2,8 +2,10 @@
 <ModMetaData>
 	<name>Caravan Auto-Bedroll</name>
 	<author>AndHobbes</author>
+  <packageId>AndHobbes.CaravanAutoBedroll</packageId>
 	<supportedVersions>
 		<li>1.0</li>
+    <li>1.1</li>
 	</supportedVersions>
 	<description>Automatically picks up enough bedrolls before caravans depart</description>
 </ModMetaData>
