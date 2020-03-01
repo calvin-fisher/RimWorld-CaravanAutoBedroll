@@ -1,4 +1,4 @@
-﻿using Harmony;
+﻿using HarmonyLib;
 using RimWorld;
 using System;
 using System.Collections.Generic;
@@ -19,7 +19,7 @@ namespace CaravanAutoBedroll
         static Mod()
         {
             LogMessage($"Initializing");
-            var harmony = HarmonyInstance.Create("RimWorld-CaravanAutoBedroll");
+            var harmony = new Harmony("AndHobbes.CaravanAutoBedroll");
 
             Dialog_FormCaravan.Patch(harmony);
         }

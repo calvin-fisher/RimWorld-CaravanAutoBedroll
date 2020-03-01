@@ -1,4 +1,4 @@
-﻿using Harmony;
+﻿using HarmonyLib;
 using RimWorld;
 using System;
 using System.Collections.Generic;
@@ -16,7 +16,7 @@ namespace CaravanAutoBedroll
     /// </summary>
     public static class Dialog_FormCaravan
     {
-        public static void Patch(HarmonyInstance harmony)
+        public static void Patch(Harmony harmony)
         {
             harmony.Patch(
                 original: typeof(RimWorld.Dialog_FormCaravan).GetMethod(
